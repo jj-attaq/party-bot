@@ -8,7 +8,7 @@ import (
 
 	"github.com/jj-attaq/party-bot/initializers"
 	"github.com/jj-attaq/party-bot/chatbot"
-	// "github.com/jj-attaq/party-bot/apify"
+	"github.com/jj-attaq/party-bot/apify"
 )
 
 func init() {
@@ -24,9 +24,6 @@ func main() {
 
     fmt.Println("Scraping...")
 
-    chatbot.TelegramBot(telegramToken)
-
-    // apify.Scraper(default_kvs, apifyToken, keywords)
-    // fmt.Println(telegramToken)
-    fmt.Println(keywords)
+    posts := apify.Scraper(default_kvs, apifyToken, keywords)
+    chatbot.TelegramBot(telegramToken, posts)
 }

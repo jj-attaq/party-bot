@@ -16,7 +16,7 @@ func prettyPrint(i interface{}) string {
     return string(s)
 }
 
-func Scraper(default_kvs string, token string, keywords []string) {
+func Scraper(default_kvs string, token string, keywords []string) []string {
     f, err := os.Open("input.json")
     if err != nil {
         // handle err
@@ -48,10 +48,13 @@ func Scraper(default_kvs string, token string, keywords []string) {
         fmt.Println("Cannot unmarshal JSON")
     }
 
+    var funcAnswer []string
     for _, posts := range result {
         fmt.Println(prettyPrint(posts.Timestamp))
         fmt.Println(prettyPrint(posts.URL))
         fmt.Println("")
+        funcAnswer = append(funcAnswer, posts.Caption)
     }
     // fmt.Println(prettyPrint(result))
+    return funcAnswer
 }

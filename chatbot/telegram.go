@@ -3,10 +3,10 @@ package chatbot
 import (
 	"log"
 
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func TelegramBot(telegramToken string) {
+func TelegramBot(telegramToken string, apifyData []string) {
 	bot, err := tgbotapi.NewBotAPI(telegramToken)
 	if err != nil {
 		log.Panic(err)
@@ -21,6 +21,16 @@ func TelegramBot(telegramToken string) {
 
 	updates := bot.GetUpdatesChan(u)
 
+	// for update := range updates {
+	// 	if update.Message != nil { // If we got a message
+	// 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+	//
+	// 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+	// 		msg.ReplyToMessageID = update.Message.MessageID
+	//
+	// 		bot.Send(msg)
+	// 	}
+	// }
 	for update := range updates {
 		if update.Message != nil { // If we got a message
 			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
@@ -28,7 +38,16 @@ func TelegramBot(telegramToken string) {
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
 			msg.ReplyToMessageID = update.Message.MessageID
 
-			bot.Send(msg)
+            if update.Message.Text == "/dance" {
+                for _, post := range apifyData {
+                    danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post)
+                    danceMsg.ReplyToMessageID = update.Message.MessageID
+                    bot.Send(danceMsg)
+                }
+            } else {
+                bot.Send(msg)
+            }
+
 		}
 	}
 }
