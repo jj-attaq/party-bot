@@ -1,2 +1,5 @@
 .DS_Store
 *.env
+input.json
+donkey.go
+out.txt
