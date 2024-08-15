@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/jj-attaq/party-bot/initializers"
-	"github.com/jj-attaq/party-bot/chatbot"
+	// "github.com/jj-attaq/party-bot/chatbot"
 	"github.com/jj-attaq/party-bot/apify"
 )
 
@@ -20,10 +20,13 @@ func main() {
 	if default_kvs == "" || apifyToken == "" {
 		log.Fatal("Missing required env vars")
 		return
-    }
+	}
 
-    fmt.Println("Scraping...")
+	// fmt.Println("Scraping...")
 
-    posts := apify.Scraper(default_kvs, apifyToken, keywords)
-    chatbot.TelegramBot(telegramToken, posts)
+	b, _ := apify.Scraper(default_kvs, apifyToken, keywords)
+	if telegramToken != "" {
+		fmt.Println(string(b))
+	}
+	// chatbot.TelegramBot(telegramToken, posts)
 }

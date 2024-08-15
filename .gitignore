@@ -2,3 +2,4 @@
 *.env
 input.json
 out.txt
+output.json

@@ -3,7 +3,7 @@ package chatbot
 import (
 	"log"
 
-    tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func TelegramBot(telegramToken string, apifyData []string) {
@@ -33,20 +33,20 @@ func TelegramBot(telegramToken string, apifyData []string) {
 	// }
 	for update := range updates {
 		if update.Message != nil { // If we got a message
-			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+			// log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
 			msg.ReplyToMessageID = update.Message.MessageID
 
-            if update.Message.Text == "/dance" {
-                for _, post := range apifyData {
-                    danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post)
-                    danceMsg.ReplyToMessageID = update.Message.MessageID
-                    bot.Send(danceMsg)
-                }
-            } else {
-                bot.Send(msg)
-            }
+			for _, post := range apifyData {
+				danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post)
+				if update.Message.Text == "/dance" {
+					danceMsg.ReplyToMessageID = update.Message.MessageID
+					bot.Send(danceMsg)
+				} else {
+					bot.Send(msg)
+				}
+			}
 
 		}
 	}

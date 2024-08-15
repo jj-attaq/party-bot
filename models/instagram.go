@@ -1,10 +1,10 @@
 package models
 
 import (
-    "time"
+	"time"
 )
 
-type InstagramPosts []struct {
+type InstagramPosts struct {
 	InputURL       string   `json:"inputUrl"`
 	ID             string   `json:"id"`
 	Type           string   `json:"type"`
