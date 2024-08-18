@@ -4,9 +4,10 @@ import (
 	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/jj-attaq/party-bot/models"
 )
 
-func TelegramBot(telegramToken string, apifyData []string) {
+func TelegramBot(telegramToken string, apifyData []models.InstagramPost) {
 	bot, err := tgbotapi.NewBotAPI(telegramToken)
 	if err != nil {
 		log.Panic(err)
@@ -39,7 +40,7 @@ func TelegramBot(telegramToken string, apifyData []string) {
 			msg.ReplyToMessageID = update.Message.MessageID
 
 			for _, post := range apifyData {
-				danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post)
+				danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post.URL)
 				if update.Message.Text == "/dance" {
 					danceMsg.ReplyToMessageID = update.Message.MessageID
 					bot.Send(danceMsg)
@@ -47,7 +48,6 @@ func TelegramBot(telegramToken string, apifyData []string) {
 					bot.Send(msg)
 				}
 			}
-
 		}
 	}
 }

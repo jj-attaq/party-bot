@@ -12,6 +12,10 @@ import (
 	"github.com/jj-attaq/party-bot/models"
 )
 
+func Scrape(token string, keywords []string) []models.InstagramPost {
+	return filter(getPosts(token), keywords)
+}
+
 func getBody(token string) *http.Response {
 	file, err := os.Open("input.json")
 	if err != nil {
@@ -39,41 +43,39 @@ func getBody(token string) *http.Response {
 	return resp
 }
 
-func Scraper(default_kvs string, token string, keywords []string) ([]byte, []models.InstagramPosts) {
-	// log.Println("file: ", file)
-
+func getPosts(token string) []byte {
 	b := getBody(token).Body
 	defer b.Close()
-	body, err := io.ReadAll(b)
-	// log.Println("body: ", string(body))
+	postsBytes, err := io.ReadAll(b)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	var posts []models.InstagramPosts
-	if err := json.Unmarshal(body, &posts); err != nil {
+	return postsBytes
+}
+
+func filter(postsBytes []byte, keywords []string) []models.InstagramPost {
+	var posts []models.InstagramPost
+	if err := json.Unmarshal(postsBytes, &posts); err != nil {
 		fmt.Println("Cannot unmarshal JSON")
 	}
 
-	var result []models.InstagramPosts
+	var result []models.InstagramPost
 	for _, post := range posts {
-
-		// if containsWords(keywords, post) && !post.IsPinned {
-		// 	result = append(result, post)
-		// 	fmt.Println(prettyPrint(post.Timestamp))
-		// 	fmt.Println(prettyPrint(post.URL))
-		// 	fmt.Println(prettyPrint(post.IsPinned))
-		// 	fmt.Println("")
-		// }
-		result = append(result, post)
+		if containsWords(keywords, post) && !post.IsPinned {
+			result = append(result, post)
+			// fmt.Println(prettyPrint(post.Timestamp))
+			// fmt.Println(prettyPrint(post.URL))
+			// fmt.Println(prettyPrint(post.IsPinned))
+			// fmt.Println("")
+		}
 	}
-	// fmt.Println(prettyPrint(result))
-	return body, result
+	return result
 }
 
-func containsWords(keywords []string, post models.InstagramPosts) bool {
+func containsWords(keywords []string, post models.InstagramPost) bool {
 	for _, word := range keywords {
-		if strings.Contains(post.Caption, word) {
+		if strings.Contains(strings.ToLower(post.Caption), strings.ToLower(word)) {
 			return true
 		}
 	}

@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type InstagramPosts struct {
+type InstagramPost struct {
 	InputURL       string   `json:"inputUrl"`
 	ID             string   `json:"id"`
 	Type           string   `json:"type"`
