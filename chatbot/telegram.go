@@ -39,14 +39,14 @@ func TelegramBot(telegramToken string, apifyData []models.InstagramPost) {
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
 			msg.ReplyToMessageID = update.Message.MessageID
 
-			for _, post := range apifyData {
-				danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post.URL)
-				if update.Message.Text == "/dance" {
-					danceMsg.ReplyToMessageID = update.Message.MessageID
+			if update.Message.Text == "/dance" {
+				for _, post := range apifyData {
+					danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post.URL)
 					bot.Send(danceMsg)
-				} else {
-					bot.Send(msg)
+					danceMsg.ReplyToMessageID = update.Message.MessageID
 				}
+			} else {
+				bot.Send(msg)
 			}
 		}
 	}

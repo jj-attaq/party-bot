@@ -64,10 +64,6 @@ func filter(postsBytes []byte, keywords []string) []models.InstagramPost {
 	for _, post := range posts {
 		if containsWords(keywords, post) && !post.IsPinned {
 			result = append(result, post)
-			// fmt.Println(prettyPrint(post.Timestamp))
-			// fmt.Println(prettyPrint(post.URL))
-			// fmt.Println(prettyPrint(post.IsPinned))
-			// fmt.Println("")
 		}
 	}
 	return result
