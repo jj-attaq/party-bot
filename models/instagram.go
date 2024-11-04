@@ -6,10 +6,11 @@ import (
 )
 
 func (p InstagramPost) DetermineIfTimedOut() bool {
-	currentTime := time.Now()
+	currentTime := time.Now().Truncate(time.Second)
 	pTime := p.Timestamp
 	fmt.Println("Current timestamp: ", currentTime)
 	fmt.Println("Post's timestamp: ", pTime)
+
 	return true
 }
 

@@ -63,9 +63,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	for _, post := range posts {
-		log.Println(post.DetermineIfTimedOut())
-	}
+	// for _, post := range posts {
+	// 	log.Println(post.DetermineIfTimedOut())
+	// }
 
 	chatbot.TelegramBot(telegramToken, posts)
 }
