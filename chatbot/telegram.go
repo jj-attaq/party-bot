@@ -40,10 +40,16 @@ func TelegramBot(telegramToken string, apifyData []models.InstagramPost) {
 			msg.ReplyToMessageID = update.Message.MessageID
 
 			if update.Message.Text == "/dance" {
-				for _, post := range apifyData {
-					danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post.URL)
+				if len(apifyData) < 1 {
+					danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "No dancing for you")
 					bot.Send(danceMsg)
 					danceMsg.ReplyToMessageID = update.Message.MessageID
+				} else {
+					for _, post := range apifyData {
+						danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post.URL)
+						bot.Send(danceMsg)
+						danceMsg.ReplyToMessageID = update.Message.MessageID
+					}
 				}
 			} else {
 				bot.Send(msg)
@@ -51,3 +57,17 @@ func TelegramBot(telegramToken string, apifyData []models.InstagramPost) {
 		}
 	}
 }
+
+// // RequestFileData represents the data to be used for a file.
+// type RequestFileData interface {
+// 	// NeedsUpload shows if the file needs to be uploaded.
+// 	NeedsUpload() bool
+//
+// 	// UploadData gets the file name and an `io.Reader` for the file to be uploaded. This
+// 	// must only be called when the file needs to be uploaded.
+// 	UploadData() (string, io.Reader, error)
+// 	// SendData gets the file data to send when a file does not need to be uploaded. This
+// 	// must only be called when the file does not need to be uploaded.
+// 	SendData() string
+// }
+//

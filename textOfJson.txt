@@ -1,0 +1,11 @@
+{
+    "resultsLimit": 10,
+    "username": [
+        "in.motion.dance.studio",
+        "danzadelarte",
+        "alcentrobelgrado",
+        "pk_natalijaiivica",
+        "bachata.serbia",
+        "varijantaeventsbelgrade"
+    ]
+}
