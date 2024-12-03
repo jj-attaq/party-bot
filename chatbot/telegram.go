@@ -47,6 +47,8 @@ func TelegramBot(telegramToken string, apifyData []models.InstagramPost) {
 				} else {
 					for _, post := range apifyData {
 						danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post.URL)
+						log.Println("TIMESTAMP INFO: ")
+						post.DetermineIfTimedOut()
 						bot.Send(danceMsg)
 						danceMsg.ReplyToMessageID = update.Message.MessageID
 					}

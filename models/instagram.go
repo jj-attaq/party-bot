@@ -1,8 +1,18 @@
 package models
 
 import (
+	"fmt"
 	"time"
 )
+
+func (p InstagramPost) DetermineIfTimedOut() bool {
+	currentTime := time.Now().Truncate(time.Second)
+	pTime := p.Timestamp
+	fmt.Println("Current timestamp: ", currentTime)
+	fmt.Println("Post's timestamp: ", pTime)
+
+	return true
+}
 
 type InstagramPost struct {
 	InputURL       string   `json:"inputUrl"`
