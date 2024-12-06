@@ -13,8 +13,8 @@ import (
 )
 
 func Scrape(apifyUrl, token string, keywords []string) []models.InstagramPost {
-	// return filter(getPosts(apifyUrl, token), keywords)
-	return helperFilter(getPosts(apifyUrl, token))
+	return filter(getPosts(apifyUrl, token), keywords)
+	// return helperFilter(getPosts(apifyUrl, token))
 }
 
 func getBody(apifyUrl, token string) *http.Response {
@@ -54,22 +54,7 @@ func getPosts(apifyUrl, token string) []byte {
 	return postsBytes
 }
 
-// func filter(postsBytes []byte, keywords []string) []models.InstagramPost {
-// 	var posts []models.InstagramPost
-// 	if err := json.Unmarshal(postsBytes, &posts); err != nil {
-// 		fmt.Println("Cannot unmarshal JSON")
-// 	}
-//
-// 	var result []models.InstagramPost
-// 	for _, post := range posts {
-// 		if containsWords(keywords, post) && !post.IsPinned {
-// 			result = append(result, post)
-// 		}
-// 	}
-// 	return result
-// }
-
-func helperFilter(postsBytes []byte) []models.InstagramPost {
+func filter(postsBytes []byte, keywords []string) []models.InstagramPost {
 	var posts []models.InstagramPost
 	if err := json.Unmarshal(postsBytes, &posts); err != nil {
 		fmt.Println("Cannot unmarshal JSON")
@@ -77,10 +62,25 @@ func helperFilter(postsBytes []byte) []models.InstagramPost {
 
 	var result []models.InstagramPost
 	for _, post := range posts {
-		result = append(result, post)
+		if containsWords(keywords, post) && !post.IsPinned && !post.DetermineIfTimedOut() {
+			result = append(result, post)
+		}
 	}
 	return result
 }
+
+// func helperFilter(postsBytes []byte) []models.InstagramPost {
+// 	var posts []models.InstagramPost
+// 	if err := json.Unmarshal(postsBytes, &posts); err != nil {
+// 		fmt.Println("Cannot unmarshal JSON")
+// 	}
+//
+// 	var result []models.InstagramPost
+// 	for _, post := range posts {
+// 		result = append(result, post)
+// 	}
+// 	return result
+// }
 
 func containsWords(keywords []string, post models.InstagramPost) bool {
 	for _, word := range keywords {

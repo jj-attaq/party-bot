@@ -6,12 +6,28 @@ import (
 )
 
 func (p InstagramPost) DetermineIfTimedOut() bool {
-	currentTime := time.Now().Truncate(time.Second)
+	now := time.Now().Truncate(time.Second)
+	loadLoc, err := time.LoadLocation("UTC")
+	if err != nil {
+		panic(err)
+	}
+	currentUTC := now.In(loadLoc)
 	pTime := p.Timestamp
-	fmt.Println("Current timestamp: ", currentTime)
-	fmt.Println("Post's timestamp: ", pTime)
 
-	return true
+	ct := currentUTC.Truncate(time.Hour)
+	pt := pTime.Truncate(time.Hour)
+
+	fmt.Printf("curr timestamp: %s, type is: %T\n", currentUTC, currentUTC)
+	fmt.Printf("post timestamp: %s, type is: %T\n", pTime, pTime)
+
+	// IF CURRENT TIME > PTIME + 3DAYS RETURN FALSE
+	if pt.Before(ct.AddDate(0, 0, -3)) {
+		fmt.Println("givenTime is older than 3 days")
+		return true
+	} else {
+		fmt.Println("givenTime is not older than 3 days")
+		return false
+	}
 }
 
 type InstagramPost struct {
