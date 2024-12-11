@@ -21,25 +21,14 @@ func TelegramBot(telegramToken string, apifyData []models.InstagramPost) {
 	u.Timeout = 60
 
 	updates := bot.GetUpdatesChan(u)
-
-	// for update := range updates {
-	// 	if update.Message != nil { // If we got a message
-	// 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-	//
-	// 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-	// 		msg.ReplyToMessageID = update.Message.MessageID
-	//
-	// 		bot.Send(msg)
-	// 	}
-	// }
 	for update := range updates {
 		if update.Message != nil { // If we got a message
-			// log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
 			msg.ReplyToMessageID = update.Message.MessageID
 
-			if update.Message.Text == "/dance" {
+			userMessage := update.Message.Text
+			switch userMessage {
+			case "/dance":
 				if len(apifyData) < 1 {
 					danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "Looks like there are no parties coming up. No dancing for you!")
 					bot.Send(danceMsg)
@@ -55,23 +44,13 @@ func TelegramBot(telegramToken string, apifyData []models.InstagramPost) {
 						danceMsg.ReplyToMessageID = update.Message.MessageID
 					}
 				}
-			} else {
+			default:
 				bot.Send(msg)
+			}
+
+			if update.Message.Text == "/dance" && len(apifyData) < 1 {
+			} else {
 			}
 		}
 	}
 }
-
-// // RequestFileData represents the data to be used for a file.
-// type RequestFileData interface {
-// 	// NeedsUpload shows if the file needs to be uploaded.
-// 	NeedsUpload() bool
-//
-// 	// UploadData gets the file name and an `io.Reader` for the file to be uploaded. This
-// 	// must only be called when the file needs to be uploaded.
-// 	UploadData() (string, io.Reader, error)
-// 	// SendData gets the file data to send when a file does not need to be uploaded. This
-// 	// must only be called when the file does not need to be uploaded.
-// 	SendData() string
-// }
-//
