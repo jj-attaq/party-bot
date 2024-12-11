@@ -41,14 +41,16 @@ func TelegramBot(telegramToken string, apifyData []models.InstagramPost) {
 
 			if update.Message.Text == "/dance" {
 				if len(apifyData) < 1 {
-					danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "No dancing for you")
+					danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, "Looks like there are no parties coming up. No dancing for you!")
 					bot.Send(danceMsg)
 					danceMsg.ReplyToMessageID = update.Message.MessageID
 				} else {
 					for _, post := range apifyData {
 						danceMsg := tgbotapi.NewMessage(update.Message.Chat.ID, post.URL)
-						log.Println("TIMESTAMP INFO: ")
-						post.DetermineIfTimedOut()
+						// log.Println("TIMESTAMP INFO: ")
+						// post.DetermineIfTimedOut()
+						log.Println("CAPTION: ")
+						log.Println(post.Caption)
 						bot.Send(danceMsg)
 						danceMsg.ReplyToMessageID = update.Message.MessageID
 					}
